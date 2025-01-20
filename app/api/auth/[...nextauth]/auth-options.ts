@@ -1,4 +1,3 @@
-// app/api/auth/[...nextauth]/auth-options.ts
 import { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
@@ -64,14 +63,14 @@ export const authOptions: NextAuthOptions = {
             credentials: {
                 email: { label: "Email", type: "email" },
                 password: { label: "Password", type: "password" },
-                password_confirm: { label: "PasswordConfirm", type: "password" }
+                confirmPassword: { label: "PasswordConfirm", type: "password" }
             },
             async authorize(credentials) {
-                const { email, password, password_confirm } = credentials as any
+                const { email, password, confirmPassword } = credentials as any
                 const res = await ApiAuthSignUp.signupWithEmail({ 
                     email, 
                     password, 
-                    password_confirm 
+                    confirmPassword 
                 })
                 const response = await res.json()
                 
@@ -107,8 +106,8 @@ export const authOptions: NextAuthOptions = {
     ],
     session: {
         strategy: "jwt",
-        maxAge: 25 * 60, // 25 min
-        updateAge: 15 * 60, // 15 min
+        maxAge: 8 * 60 * 60, // 25 min
+        updateAge: 4 * 60 * 60, // 15 min
     },
     secret: process.env.ACCESS_TOKEN_SECRET,
     jwt: {
@@ -230,16 +229,32 @@ export const authOptions: NextAuthOptions = {
         async session({ session, token }) {
             try {
                 const currentTime = Math.floor(Date.now() / 1000)
-                if (token.profile?.exp && token.profile.exp < currentTime) {
-                    const resp = await ApiLogin.refresh(token.refreshToken)
-                    const res = await resp.json()
-                    if (resp.ok && res.code === 200) {
-                        await ApiLogin.signOut({ 
-                            access: token.accessToken, 
-                            refresh: token.refreshToken 
-                        })
-                        token.accessToken = res.message.accessToken
-                        token.refreshToken = res.message.refreshToken
+                const tokenExpiry = token.profile?.exp || 0
+                const timeUntilExpiry = tokenExpiry - currentTime
+                if (timeUntilExpiry < 4) {
+                    try {
+                        const resp = await ApiLogin.refresh(token.refreshToken)
+                        const res = await resp.json()
+                        
+                        if (resp.ok && res.code === 200) {
+                            // Invalider l'ancien token
+                            await ApiLogin.signOut({ 
+                                access: token.accessToken, 
+                                refresh: token.refreshToken 
+                            })
+                            
+                            // Mettre à jour les tokens
+                            token.accessToken = res.message.accessToken
+                            token.refreshToken = res.message.refreshToken
+                            
+                            // Mettre à jour les informations du profil
+                            const newProfile = jwt.decode(res.message.accessToken, { complete: true })?.payload
+                            if (newProfile) {
+                                token.profile = newProfile
+                            }
+                        }
+                    } catch (error) {
+                        console.log("Token refresh failed:", error)
                     }
                 }
                 session.user = token

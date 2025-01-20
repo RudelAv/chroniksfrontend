@@ -8,9 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -28,7 +31,7 @@ export default function LoginPage() {
     setIsLoading(false);
 
     if (!response?.error) {
-      router.push("/");
+      router.push(callbackUrl || "/");
       router.refresh();
     } else {
       toast({

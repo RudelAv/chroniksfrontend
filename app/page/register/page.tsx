@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import ApiAuthSignUp from "@/app/api/authentification/register";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -16,32 +17,38 @@ export default function RegisterPage() {
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLoading(true);
-
-    const formData = new FormData(event.currentTarget);
-    const response = await fetch("/api/auth/register", {
-      method: "POST",
-      body: JSON.stringify({
-        name: formData.get("name"),
-        email: formData.get("email"),
-        password: formData.get("password"),
-      }),
-    });
-
-    setIsLoading(false);
-
-    if (response.ok) {
-      router.push("/login");
-      toast({
-        title: "Account created",
-        description: "Please sign in with your new account",
+  
+    try {
+      const formData = new FormData(event.currentTarget);
+      const response = await ApiAuthSignUp.signupWithEmail({
+        name: formData.get("name") as string,
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+        confirmPassword: formData.get("password") as string,
       });
-    } else {
-      const error = await response.text();
+  
+      // Puisque vous avez reçu un accessToken et refreshToken, le compte a été créé avec succès
+      if (response.accessToken && response.refreshToken) {
+        router.push("/page/login");
+        toast({
+          title: "Account created",
+          description: "Please sign in with your new account",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Something went wrong. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: error || "Something went wrong. Please try again.",
+        description: error.message || "An unexpected error occurred",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -101,7 +108,7 @@ export default function RegisterPage() {
             </Button>
             <p className="text-center text-sm text-muted-foreground">
               Already have an account?{" "}
-              <Link href="/login" className="text-primary hover:underline">
+              <Link href="/page/login" className="text-primary hover:underline">
                 Sign in
               </Link>
             </p>
