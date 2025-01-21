@@ -1,7 +1,7 @@
 import BackendApi from "../baseApi";
 
 export default class ApiAuthSignUp {
-    static baseUrl = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL + "/signup";
+    static baseUrl = process.env.NEXT_PUBLIC_API_URL + "/signup";
 
     static async signupWithEmail(data: {
         name: string,
@@ -21,6 +21,6 @@ export default class ApiAuthSignUp {
         username: string | null | undefined
     }) {
         const api = new BackendApi(`${this.baseUrl}/oauth`);
-        return await api.post(data)
+        return await api.post("", data)
     }
 }

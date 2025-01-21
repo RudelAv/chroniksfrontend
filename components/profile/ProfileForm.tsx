@@ -1,0 +1,307 @@
+"use client";
+
+import React, { useState } from 'react';
+import { Session } from 'next-auth';
+import Image from 'next/image';
+import ApiProfile from '@/app/api/authentification/profile';
+import { useToast } from '@/hooks/use-toast';
+
+interface ProfileFormProps {
+  session: Session;
+}
+
+interface ProfileFormData {
+  name: string;
+  bio: string;
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export const ProfileForm: React.FC<ProfileFormProps> = ({ session }) => {
+  const { toast } = useToast();
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [formData, setFormData] = useState<ProfileFormData>({
+    name: session?.user?.name || '',
+    bio: '',
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        const accessToken = (session as any).user?.accessToken;
+        if (!accessToken) {
+          toast({
+            title: "Error",
+            description: "Authentication token not found",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        const response = await ApiProfile.uploadProfileImage(accessToken, formData);
+        if (response.imageUrl) {
+          setProfileImage(response.imageUrl);
+          toast({
+            title: "Success",
+            description: "Profile picture updated successfully",
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to upload image",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const accessToken = (session as any).user?.accessToken;
+      if (!accessToken) {
+        toast({
+          title: "Error",
+          description: "Authentication token not found",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Préparer les données à envoyer
+      const updateData = {
+        name: formData.name,
+        bio: formData.bio,
+      };
+
+      const response = await ApiProfile.updateProfile(accessToken, updateData);
+      
+      if (response && response.name) {
+        toast({
+          title: "Success",
+          description: "Profile updated successfully",
+        });
+        
+        setFormData(prev => ({
+          ...prev,
+          name: response.name,
+          bio: response.bio || '',
+        }));
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to update profile",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast({
+        title: "Error",
+        description: "An error occurred while updating your profile",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      if (formData.newPassword !== formData.confirmPassword) {
+        toast({
+          title: "Error",
+          description: "New passwords don't match",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (!formData.currentPassword) {
+        toast({
+          title: "Error",
+          description: "Current password is required",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const accessToken = (session as any).user?.accessToken;
+      if (!accessToken) {
+        toast({
+          title: "Error",
+          description: "Authentication token not found",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const updateData = {
+        currentPassword: formData.currentPassword,
+        newPassword: formData.newPassword,
+      };
+
+      const response = await ApiProfile.updatePassword(accessToken, updateData);
+      
+      if (response && response.success) {
+        toast({
+          title: "Success",
+          description: "Password updated successfully",
+        });
+        
+        setFormData(prev => ({
+          ...prev,
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: '',
+        }));
+      } else {
+        toast({
+          title: "Error",
+          description: response?.message || "Failed to update password",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Error updating password:', error);
+      toast({
+        title: "Error",
+        description: "An error occurred while updating your password",
+        variant: "destructive",
+      });
+    }
+  };
+
+  return (
+    <div className="space-y-8 max-w-2xl mx-auto">
+      {/* Section Photo de profil */}
+      <section className="p-6 rounded-lg shadow">
+        <h2 className="text-xl font-semibold mb-4">Profile Picture</h2>
+        <div className="text-center">
+          <div className="relative w-32 h-32 mx-auto mb-4">
+            <Image
+              src={profileImage || session?.user?.image || '/globe.svg'}
+              alt="Profile picture"
+              fill
+              className="rounded-full object-cover"
+            />
+          </div>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="hidden"
+            id="profile-image"
+          />
+          <label
+            htmlFor="profile-image"
+            className="btn btn-secondary cursor-pointer"
+          >
+            Change picture
+          </label>
+        </div>
+      </section>
+
+      {/* Section Informations du profil */}
+      <section className="p-6 rounded-lg shadow">
+        <h2 className="text-xl font-semibold mb-4">Profile Information</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium">Name</label>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData({...formData, name: e.target.value})}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium">Email</label>
+            <input
+              type="email"
+              value={session?.user?.email || ''}
+              disabled
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-50"
+            />
+            <p className="text-sm text-gray-500 mt-1">Email cannot be changed</p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium">Bio</label>
+            <textarea
+              value={formData.bio}
+              onChange={(e) => setFormData({...formData, bio: e.target.value})}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+              rows={4}
+            />
+          </div>
+
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="btn btn-primary"
+            >
+              Save changes
+            </button>
+          </div>
+        </form>
+      </section>
+
+      {/* Section Changement de mot de passe */}
+      <section className="p-6 rounded-lg shadow">
+        <h2 className="text-xl font-semibold mb-4">Change Password</h2>
+        <form onSubmit={handlePasswordChange} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium">Current Password</label>
+            <input
+              type="password"
+              value={formData.currentPassword}
+              onChange={(e) => setFormData({...formData, currentPassword: e.target.value})}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium">New Password</label>
+            <input
+              type="password"
+              value={formData.newPassword}
+              onChange={(e) => setFormData({...formData, newPassword: e.target.value})}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium">Confirm New Password</label>
+            <input
+              type="password"
+              value={formData.confirmPassword}
+              onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+            />
+          </div>
+
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="btn btn-primary"
+            >
+              Update password
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
+  );
+}; 

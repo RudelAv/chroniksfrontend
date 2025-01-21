@@ -21,15 +21,13 @@ const headerWithoutToken = {
     }
   
     async handleResponse(response: Response) {
-      // Vérifiez si le statut HTTP est 2xx
       if (!response.ok) {
-        const errorData = await response.json(); // Essayez de récupérer l'erreur JSON
+        const errorData = await response.json();
         throw new Error(
           errorData?.message || `HTTP Error: ${response.status} ${response.statusText}`
         );
       }
   
-      // Retournez la réponse JSON
       return response.json();
     }
   
@@ -51,6 +49,7 @@ const headerWithoutToken = {
     }
   
     async put(endpoint: string, data: any, token?: string) {
+      console.log("token", token);
       const response = await fetch(`${this.url}${endpoint}`, {
         method: "PUT",
         headers: getHeader(token),

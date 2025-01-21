@@ -235,18 +235,17 @@ export const authOptions: NextAuthOptions = {
                     try {
                         const resp = await ApiLogin.refresh(token.refreshToken as string)
                         const res = await resp.json()
+                        console.log("res", res)
                         
-                        if (resp.ok && res.code === 200) {
+                        if (res.code === 200) {
+                            console.log("res", res)
                             // Invalider l'ancien token
-                            await ApiLogin.signOut({ 
-                                access: token.accessToken, 
-                                refresh: token.refreshToken 
-                            })
+                            await ApiLogin.signOut(token.accessToken as string, token.refreshToken as string)
                             
                             // Mettre à jour les tokens
                             token.accessToken = res.message.accessToken
                             token.refreshToken = res.message.refreshToken
-                            
+                            console.log("tokensssss", token.accessToken)
                             // Mettre à jour les informations du profil
                             const newProfile = jwt.decode(res.message.accessToken, { complete: true })?.payload
                             if (newProfile) {
@@ -258,6 +257,15 @@ export const authOptions: NextAuthOptions = {
                     }
                 }
                 session.user = token
+                console.log("token", token)
+                console.log("Session refreshed:", {
+                    user: {
+                        ...session.user,
+                        accessToken: session.user.accessToken ? '[PRESENT]' : '[MISSING]',
+                        refreshToken: session.user.refreshToken ? '[PRESENT]' : '[MISSING]',
+                    },
+                    expires: session.expires,
+                })
                 return session
             } catch (error) {
                 logError(error)
@@ -265,7 +273,7 @@ export const authOptions: NextAuthOptions = {
             }
         },
         async redirect({ baseUrl }) {
-            return process.env.NEXT_PUBLIC_AUTH_URL || baseUrl
+            return process.env.NEXT_PUBLIC_API_URL || baseUrl
         },
     },
     cookies: {
