@@ -106,8 +106,8 @@ export const authOptions: NextAuthOptions = {
     ],
     session: {
         strategy: "jwt",
-        maxAge: 8 * 60 * 60, // 25 min
-        updateAge: 4 * 60 * 60, // 15 min
+        maxAge: 60 * 60, // 1 hour
+        updateAge: 60 * 30, // 30 min
     },
     secret: process.env.ACCESS_TOKEN_SECRET,
     jwt: {
@@ -170,7 +170,7 @@ export const authOptions: NextAuthOptions = {
 
                         return true
                     }
-                    return `/account/login?error=${encodeURIComponent("Invalid Credentials")}`
+                    return `/page/login?error=${encodeURIComponent("Invalid Credentials")}`
                 }
 
                 if (account?.provider === 'github' || account?.provider === 'google') {
@@ -233,7 +233,7 @@ export const authOptions: NextAuthOptions = {
                 const timeUntilExpiry = tokenExpiry - currentTime
                 if (timeUntilExpiry < 4) {
                     try {
-                        const resp = await ApiLogin.refresh(token.refreshToken)
+                        const resp = await ApiLogin.refresh(token.refreshToken as string)
                         const res = await resp.json()
                         
                         if (resp.ok && res.code === 200) {

@@ -15,13 +15,13 @@ export default async function Home() {
           Write, share, and engage with a community of developers. Start your blogging journey today.
         </p>
         <div className="flex justify-center gap-4">
-          <Link href="/register">
+          <Link href="/page/register">
             <Button size="lg">
               Start Writing
               <PenLine className="ml-2 h-5 w-5" />
             </Button>
           </Link>
-          <Link href="/posts">
+          <Link href="/page/posts">
             <Button variant="outline" size="lg">
               Explore Posts
             </Button>
@@ -33,7 +33,6 @@ export default async function Home() {
       <section className="py-16">
         <h2 className="text-3xl font-bold mb-8">Featured Posts</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Sample cards - replace with actual data */}
           <Card>
             <CardHeader>
               <CardTitle>Getting Started with Next.js 13</CardTitle>
@@ -49,7 +48,6 @@ export default async function Home() {
               </Link>
             </CardFooter>
           </Card>
-          {/* Add more sample cards */}
         </div>
       </section>
     </div>

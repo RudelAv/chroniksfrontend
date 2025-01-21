@@ -27,7 +27,6 @@ export default function RegisterPage() {
         confirmPassword: formData.get("password") as string,
       });
   
-      // Puisque vous avez reçu un accessToken et refreshToken, le compte a été créé avec succès
       if (response.accessToken && response.refreshToken) {
         router.push("/page/login");
         toast({

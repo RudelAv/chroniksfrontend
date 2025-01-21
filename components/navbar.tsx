@@ -22,10 +22,10 @@ export default function Navbar() {
           <div className="flex items-center space-x-4">
             {session ? (
               <>
-                <Link href="/write">
+                <Link href="/page/write">
                   <Button variant="outline">Write Post</Button>
                 </Link>
-                <Link href="/profile">
+                <Link href="/page/profile">
                   <Button variant="ghost" size="icon">
                     <User className="h-5 w-5" />
                   </Button>
