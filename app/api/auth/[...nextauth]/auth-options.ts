@@ -238,7 +238,6 @@ export const authOptions: NextAuthOptions = {
                     }
                 }
                 session.user = token
-                // console.log("token", token)
                 console.log("Session refreshed:", {
                     user: {
                         ...session.user,

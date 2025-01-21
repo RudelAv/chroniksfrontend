@@ -3,6 +3,10 @@ const nextConfig = {
   images: {
     domains: ['res.cloudinary.com'],
   },
+  webpack: (config) => {
+    config.externals = [...(config.externals || []), "canvas", "jsdom"];
+    return config;
+  },
 }
 
 module.exports = nextConfig 

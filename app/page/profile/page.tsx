@@ -9,12 +9,12 @@ const ProfilePage = async () => {
     console.log("session", session)
 
     if (!session) {
-        redirect('/page/login');
+        redirect('/page/login?callbackUrl=/page/profile');
     }
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-8 text-center">My Profile</h1>
+            <h1 className="text-3xl font-bold mb-8 text-center">Mon profil</h1>
             <ProfileForm session={session} />
         </div>
     );

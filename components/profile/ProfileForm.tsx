@@ -249,17 +249,17 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ session }) => {
             htmlFor="profile-image"
             className="btn btn-secondary cursor-pointer"
           >
-            Change picture
+            Changer la photo
           </label>
         </div>
       </section>
 
       {/* Section Informations du profil */}
       <section className="p-6 rounded-lg shadow">
-        <h2 className="text-xl font-semibold mb-4">Profile Information</h2>
+        <h2 className="text-xl font-semibold mb-4">Informations du profil</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium">Name</label>
+            <label className="block text-sm font-medium">Nom</label>
             <input
               type="text"
               value={formData.name}
@@ -274,9 +274,9 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ session }) => {
               type="email"
               value={session?.user?.email || ''}
               disabled
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-50"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
             />
-            <p className="text-sm text-gray-500 mt-1">Email cannot be changed</p>
+            <p className="text-sm text-gray-500 mt-1">Email ne peut être modifié</p>
           </div>
 
           <div>
@@ -294,7 +294,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ session }) => {
               type="submit"
               className="btn btn-primary"
             >
-              Save changes
+              Sauvegarder
             </button>
           </div>
         </form>
@@ -302,10 +302,10 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ session }) => {
 
       {/* Section Changement de mot de passe */}
       <section className="p-6 rounded-lg shadow">
-        <h2 className="text-xl font-semibold mb-4">Change Password</h2>
+        <h2 className="text-xl font-semibold mb-4">Changement de mot de passe</h2>
         <form onSubmit={handlePasswordChange} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium">Current Password</label>
+            <label className="block text-sm font-medium">Mot de passe actuel</label>
             <input
               type="password"
               value={formData.currentPassword}
@@ -315,7 +315,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ session }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium">New Password</label>
+            <label className="block text-sm font-medium">Nouveau mot de passe</label>
             <input
               type="password"
               value={formData.newPassword}
@@ -325,7 +325,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ session }) => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium">Confirm New Password</label>
+            <label className="block text-sm font-medium">Confirmer le nouveau mot de passe</label>
             <input
               type="password"
               value={formData.confirmPassword}
@@ -339,7 +339,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ session }) => {
               type="submit"
               className="btn btn-primary"
             >
-              Update password
+              Mettre à jour
             </button>
           </div>
         </form>

@@ -4,9 +4,25 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { Button } from "./ui/button";
 import { PenLine, User } from "lucide-react";
+import ApiLogin from "@/app/api/authentification/login";
 
 export default function Navbar() {
   const { data: session } = useSession();
+
+  const handleSignOut = async () => {
+    try {
+      if (session?.user?.accessToken && session?.user?.refreshToken) {
+        await ApiLogin.signOut(
+          session.user.accessToken,
+          session.user.refreshToken
+        );
+      }
+      await signOut({ callbackUrl: '/page/login' });
+    } catch (error) {
+      console.error("Erreur lors de la déconnexion:", error);
+      await signOut({ callbackUrl: '/page/login' });
+    }
+  };
 
   return (
     <nav className="border-b bg-background">
@@ -30,7 +46,7 @@ export default function Navbar() {
                     <User className="h-5 w-5" />
                   </Button>
                 </Link>
-                <Button variant="ghost" onClick={() => signOut()}>
+                <Button variant="ghost" onClick={handleSignOut}>
                   Sign Out
                 </Button>
               </>

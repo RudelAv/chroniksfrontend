@@ -87,5 +87,17 @@ const headerWithoutToken = {
         });
         return this.handleResponse(response);
     }
+
+    async postFormData(endpoint: string, formData: FormData, token?: string) {
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const response = await fetch(`${this.url}${endpoint}`, {
+          method: "POST",
+          headers: {
+              ...(token ? { Authorization: `Bearer ${token}` } : {})
+          },
+          body: formData
+      });
+      return this.handleResponse(response);
+  }
   }
   
