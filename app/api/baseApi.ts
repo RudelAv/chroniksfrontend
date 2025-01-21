@@ -34,7 +34,9 @@ const headerWithoutToken = {
     async get(endpoint: string, token?: string) {
       const response = await fetch(`${this.url}${endpoint}`, {
         method: "GET",
-        headers: getHeader(token),
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       return this.handleResponse(response);
     }
@@ -72,6 +74,18 @@ const headerWithoutToken = {
             headers: headers,
             body: JSON.stringify(data)
         });
+    }
+
+    async putFormData(endpoint: string, formData: FormData, token?: string) {
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        const response = await fetch(`${this.url}${endpoint}`, {
+            method: "PUT",
+            headers: {
+                ...(token ? { Authorization: `Bearer ${token}` } : {})
+            },
+            body: formData
+        });
+        return this.handleResponse(response);
     }
   }
   

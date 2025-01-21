@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Session } from 'next-auth';
 import Image from 'next/image';
 import ApiProfile from '@/app/api/authentification/profile';
 import { useToast } from '@/hooks/use-toast';
+import { useStore } from '@/stores/useStore'
 
 interface ProfileFormProps {
   session: Session;
@@ -22,24 +23,61 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ session }) => {
   const { toast } = useToast();
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [formData, setFormData] = useState<ProfileFormData>({
-    name: session?.user?.name || '',
+    name: '',
     bio: '',
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
+  const { user, setUser } = useStore();
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const accessToken = (session as any).user?.accessToken;
+        console.log(" voici l'accessToken", accessToken)
+        if (!accessToken) {
+          toast({
+            title: "Erreur",
+            description: "Token d'authentification non trouvé",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        const profileData = await ApiProfile.getProfile(accessToken);
+        if (profileData) {
+          setFormData(prev => ({
+            ...prev,
+            name: profileData.name || '',
+            bio: profileData.bio || '',
+          }));
+          setProfileImage(profileData.image || null);
+          setUser(profileData);
+        }
+      } catch (error) {
+        toast({
+          title: "Erreur",
+          description: "Impossible de récupérer les données du profil",
+          variant: "destructive",
+        });
+      }
+    };
+
+    fetchProfileData();
+  }, [session, toast, setUser]);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       try {
         const formData = new FormData();
-        formData.append('image', file);
+        formData.append('avatar', file);
 
         const accessToken = (session as any).user?.accessToken;
         if (!accessToken) {
           toast({
-            title: "Error",
+            title: "Erreur",
             description: "Authentication token not found",
             variant: "destructive",
           });
@@ -47,17 +85,20 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ session }) => {
         }
 
         const response = await ApiProfile.uploadProfileImage(accessToken, formData);
-        if (response.imageUrl) {
-          setProfileImage(response.imageUrl);
+        if (response.image) {
+          setProfileImage(response.image);
+          if (session.user) {
+            session.user.image = response.image;
+          }
           toast({
-            title: "Success",
-            description: "Profile picture updated successfully",
+            title: "Succès",
+            description: "Photo de profil mise à jour avec succès",
           });
         }
       } catch (error) {
         toast({
-          title: "Error",
-          description: "Failed to upload image",
+          title: "Erreur",
+          description: "Échec du téléchargement de l'image",
           variant: "destructive",
         });
       }
@@ -97,6 +138,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ session }) => {
           name: response.name,
           bio: response.bio || '',
         }));
+        setUser(response.user)
       } else {
         toast({
           title: "Error",
@@ -186,12 +228,12 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ session }) => {
     <div className="space-y-8 max-w-2xl mx-auto">
       {/* Section Photo de profil */}
       <section className="p-6 rounded-lg shadow">
-        <h2 className="text-xl font-semibold mb-4">Profile Picture</h2>
+        <h2 className="text-xl font-semibold mb-4">Photo de profil</h2>
         <div className="text-center">
           <div className="relative w-32 h-32 mx-auto mb-4">
             <Image
-              src={profileImage || session?.user?.image || '/globe.svg'}
-              alt="Profile picture"
+              src={profileImage || user?.image || '/globe.svg'}
+              alt="Photo de profil"
               fill
               className="rounded-full object-cover"
             />

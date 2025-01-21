@@ -7,31 +7,12 @@ import ApiLogin from "../../authentification/login"
 import jwt from "jsonwebtoken"
 import { getName, logError } from "@/lib/utils"
 import { getSession } from "next-auth/react"
+import { useStore } from '@/stores/useStore'
 
 export function capitalize(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
 }
 
-async function refreshAccessToken(token: any) {
-    try {
-        const response = await ApiLogin.refresh(token)
-        const refreshedTokens = await response.json()
-        if (!response.ok) {
-            throw refreshedTokens
-        }
-        return {
-            ...token,
-            accessToken: refreshedTokens.accessToken,
-            refreshToken: refreshedTokens.refreshToken ?? token.refreshToken,
-        }
-    } catch (error) {
-        console.log(error)
-        return {
-            ...token,
-            error: "RefreshAccessTokenError",
-        }
-    }
-}
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -201,7 +182,7 @@ export const authOptions: NextAuthOptions = {
                         }
                         return true
                     }
-                    return `/account/login?error=${encodeURIComponent(result.message)}`
+                    return `/page/login?error=${encodeURIComponent(result.message)}`
                 }
                 return false
             } catch (error) {
@@ -237,35 +218,40 @@ export const authOptions: NextAuthOptions = {
                         const res = await resp.json()
                         console.log("res", res)
                         
-                        if (res.code === 200) {
-                            console.log("res", res)
+                        if (res.code == 200) {
                             // Invalider l'ancien token
                             await ApiLogin.signOut(token.accessToken as string, token.refreshToken as string)
                             
                             // Mettre à jour les tokens
                             token.accessToken = res.message.accessToken
                             token.refreshToken = res.message.refreshToken
-                            console.log("tokensssss", token.accessToken)
                             // Mettre à jour les informations du profil
                             const newProfile = jwt.decode(res.message.accessToken, { complete: true })?.payload
                             if (newProfile) {
                                 token.profile = newProfile
                             }
+                        } else {
+                            console.log("error")
                         }
                     } catch (error) {
                         console.log("Token refresh failed:", error)
                     }
                 }
                 session.user = token
-                console.log("token", token)
+                // console.log("token", token)
                 console.log("Session refreshed:", {
                     user: {
                         ...session.user,
-                        accessToken: session.user.accessToken ? '[PRESENT]' : '[MISSING]',
-                        refreshToken: session.user.refreshToken ? '[PRESENT]' : '[MISSING]',
+                        accessToken: session.user.accessToken,
+                        refreshToken: session.user.refreshToken,
                     },
                     expires: session.expires,
                 })
+                if (session.user) {
+                    session.user.id = token.sub as string
+                    // Mettre à jour le store quand la session change
+                    useStore.getState().setUser(session.user)
+                }
                 return session
             } catch (error) {
                 logError(error)

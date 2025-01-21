@@ -9,12 +9,13 @@ export default class ApiProfile {
     }
     static async uploadProfileImage(accessToken: any, formData: FormData) {
         const api = new BackendApi(`${this.url}/profile`);
-        return await api.put("/", formData, accessToken);
+        return await api.putFormData("/", formData, accessToken);
     }
 
     static async getProfile(accessToken: string) {
+        console.log("accessToken2", accessToken)
         const api = new BackendApi(`${this.url}/profile`);
-        return await api.get("/", "Bearer " + accessToken);
+        return await api.get("/", accessToken);
     }
 
     static async updateProfile(accessToken: string, data: any) {
