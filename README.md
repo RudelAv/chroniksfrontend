@@ -1,8 +1,8 @@
 # DevBlog
 
-DevBlog est une plateforme de blogging dédiée aux développeurs et passionnés de technologie. Cette application web permet aux utilisateurs de partager leurs connaissances, expériences et découvertes dans le domaine des technologies.
+DevBlog est une plateforme de blogging dédiée aux développeurs et passionnés de technologie. Cette application web permet aux utilisateurs de partager leurs connaissances, expériences et découvertes dans le domaine des technologies. (encore en cours de developpement)
 
-## Fonctionnalités
+## Fonctionnalités implémentées
 
 - Authentification des utilisateurs
 - Publication d'articles
