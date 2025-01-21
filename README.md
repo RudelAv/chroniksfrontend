@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DevBlog
 
-## Getting Started
+DevBlog est une plateforme de blogging dédiée aux développeurs et passionnés de technologie. Cette application web permet aux utilisateurs de partager leurs connaissances, expériences et découvertes dans le domaine des technologies.
 
-First, run the development server:
+## Fonctionnalités
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Authentification des utilisateurs
+- Publication d'articles
+- Lecture d'articles
+- Interface utilisateur moderne et responsive
+- Protection des routes privées
+
+## Technologies Utilisées
+
+- Next.js 14 (App Router)
+- React
+- TypeScript
+- NextAuth.js pour l'authentification
+- Tailwind CSS pour le style
+- Radix UI pour les composants
+- React Server Components
+- Zustand pour le state management
+
+## Installation
+
+1. Clonez le repository : `git clone https://github.com/RudelAv/chroniksfrontend.git`
+2. Installez les dépendances : `npm install`
+3. Configurez les variables d'environnement : 
 ```
+NEXT_PUBLIC_API_URL=http://localhost:3000
+ACCESS_TOKEN_SECRET=LA_CLE_SECRETE_POUR_LE_TOKEN_D_ACCES
+```
+NB: La clé secrète pour le token d'accès doit être la même que celle utilisée dans le serveur backend.
+4. Démarrez le serveur de développement : `npm run dev`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Utilisation
+Pour pouvoir démarrer l'application, il faut démarrer le serveur backend de chroniks. vous pouvez cloner le repository [chroniksbackend](https://github.com/RudelAv/chroniksbackend.git) et suivre les instructions de son README.md.
+Pour accéder à l'application, rendez-vous sur `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
