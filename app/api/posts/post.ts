@@ -57,4 +57,13 @@ export default class ApiPost {
         const api = new BackendApi(`${this.url}/post`);
         return await api.delete(`/${postId}/dislike`, accessToken);
     }
+
+    static async searchPost(accessToken: any, query: string, tags?: string[]) {
+        const api = new BackendApi(`${this.url}/post`);
+        const searchParams = new URLSearchParams({ q: query });
+        if (tags?.length) {
+            searchParams.append('tags', tags.join(','));
+        }
+        return await api.get(`/search?${searchParams.toString()}`, accessToken);
+    }
 }

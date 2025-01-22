@@ -7,6 +7,8 @@ DevBlog est une plateforme de blogging dédiée aux développeurs et passionnés
 - Authentification des utilisateurs
 - Publication d'articles
 - Lecture d'articles
+- Likes, commentaires, et partage d'articles
+- Recherche d'articles
 - Interface utilisateur moderne et responsive
 - Protection des routes privées
 

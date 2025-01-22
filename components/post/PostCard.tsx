@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
+import { useRouter } from "next/navigation";
 
 interface PostCardProps {
   post: {
@@ -16,6 +17,12 @@ interface PostCardProps {
 }
 
 export default function PostCard({ post }: PostCardProps) {
+  const router = useRouter();
+
+  const handleTagClick = (tag: string) => {
+    router.push(`/search?tags=${encodeURIComponent(tag)}`);
+  };
+
   return (
     <Link href={`/page/post/${post._id}`}>
       <Card className="h-full hover:shadow-lg transition-shadow">
@@ -42,6 +49,17 @@ export default function PostCard({ post }: PostCardProps) {
           <p className="text-muted-foreground line-clamp-3">
             {post.content.replace(/[#*`]/g, '')}
           </p>
+          <div className="flex flex-wrap gap-2 mt-2">
+            {post.tags?.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => handleTagClick(tag)}
+                className="text-sm bg-primary/10 text-primary px-2 py-1 rounded-full hover:bg-primary/20 transition-colors"
+              >
+                #{tag}
+              </button>
+            ))}
+          </div>
         </CardContent>
         <CardFooter>
           <p className="text-sm text-muted-foreground">
