@@ -23,4 +23,9 @@ export default class ApiProfile {
         const api = new BackendApi(`${this.url}/profile`);
         return await api.put("/", data, accessToken);
     }
+
+    static async getUserInfo(accessToken: string, userId: string) {
+        const api = new BackendApi(`${this.url}/profile`);
+        return await api.get(`/${userId}`, accessToken);
+    }
 }

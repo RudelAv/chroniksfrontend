@@ -27,4 +27,34 @@ export default class ApiPost {
         const api = new BackendApi(`${this.url}/post`);
         return await api.get(`/${postId}/author`, accessToken);
     }
+
+    static async deletePost(accessToken: any, postId: string) {
+        const api = new BackendApi(`${this.url}/post`);
+        return await api.delete(`/${postId}`, accessToken);
+    }
+
+    static async getPostComments(accessToken: any, postId: string) {
+        const api = new BackendApi(`${this.url}/post`);
+        return await api.get(`/${postId}/comments`, accessToken);
+    }
+
+    static async getPostLikes(accessToken: any, postId: string) {
+        const api = new BackendApi(`${this.url}/post`);
+        return await api.get(`/${postId}/likes`, accessToken);
+    }
+
+    static async commentPost(accessToken: any, postId: string, content: string) {
+        const api = new BackendApi(`${this.url}/post`);
+        return await api.post(`/${postId}/comment`, { content }, accessToken);
+    }
+
+    static async likePost(accessToken: any, postId: string) {
+        const api = new BackendApi(`${this.url}/post`);
+        return await api.post(`/${postId}/like`, {}, accessToken);
+    }
+
+    static async unLikePost(accessToken: any, postId: string) {
+        const api = new BackendApi(`${this.url}/post`);
+        return await api.delete(`/${postId}/dislike`, accessToken);
+    }
 }

@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { SessionProvider } from '@/components/session-provider';
 import Navbar from '@/components/navbar';
 import { Toaster } from '@/components/ui/toaster';
+import { Toaster as SonnerToaster } from 'sonner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -33,6 +34,7 @@ export default function RootLayout({
               {children}
             </main>
             <Toaster />
+            <SonnerToaster position="top-right" />
           </ThemeProvider>
         </SessionProvider>
       </body>
