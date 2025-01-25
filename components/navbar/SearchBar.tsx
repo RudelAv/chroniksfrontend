@@ -4,10 +4,17 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { useSession } from 'next-auth/react';
 
 export default function SearchBar() {
     const router = useRouter();
+    const { data: session } = useSession();
     const [searchQuery, setSearchQuery] = useState('');
+
+    // Si l'utilisateur n'est pas connecté, ne rien afficher
+    if (!session?.user) {
+        return null;
+    }
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();

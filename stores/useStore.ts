@@ -6,6 +6,8 @@ interface UserState {
     id: string;
     email: string;
     name: string;
+    bio?: string;
+    image?: string;
   } | null;
   setUser: (user: UserState['user']) => void;
   clearUser: () => void;

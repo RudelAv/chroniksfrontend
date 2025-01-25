@@ -66,4 +66,14 @@ export default class ApiPost {
         }
         return await api.get(`/search?${searchParams.toString()}`, accessToken);
     }
+
+    static async getBestPosts() {
+        const api = new BackendApi(`${this.url}/post`);
+        return await api.get('/best');
+    }
+
+    static async getPostByAuthor(accessToken: any, userId: string) {
+        const api = new BackendApi(`${this.url}/post`);
+        return await api.get(`/user/${userId}`, accessToken);
+    }   
 }

@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { authOptions } from "@/app/api/auth/[...nextauth]/auth-options";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
+import { PostListSkeleton } from "@/components/post/PostSkeleton";
 
 export default async function HomePage() {
   const session = await getServerSession(authOptions);
@@ -19,7 +20,7 @@ export default async function HomePage() {
           <div className="space-x-4">
             <Link 
               href="/page/login"
-              className="inline-block text-white px-6 py-2 rounded-md hover:bg-primary/90"
+              className="inline-block bg-dark text-white px-6 py-2 rounded-md hover:bg-primary/10"
             >
               Se connecter
             </Link>
@@ -27,24 +28,23 @@ export default async function HomePage() {
         </div>
       ) : null}
 
-      <h2 className="text-3xl font-bold mb-8">Articles récents</h2>
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-3xl font-bold">
+          {session ? "Articles récents" : "Articles les plus appréciés"}
+        </h2>
+        {session && (
+          <Link
+            href="/page/write"
+            className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90"
+          >
+            Écrire un article
+          </Link>
+        )}
+      </div>
+
       <Suspense fallback={<PostListSkeleton />}>
         <PostList />
       </Suspense>
     </main>
-  );
-}
-
-function PostListSkeleton() {
-  return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {[...Array(6)].map((_, i) => (
-        <div key={i} className="space-y-4">
-          <Skeleton className="h-48 w-full" />
-          <Skeleton className="h-4 w-3/4" />
-          <Skeleton className="h-4 w-1/2" />
-        </div>
-      ))}
-    </div>
   );
 }

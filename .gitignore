@@ -6,6 +6,7 @@
 /package-lock.json
 .pnp.*
 .yarn/*
+/.vscode/*
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases

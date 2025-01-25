@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
+import Link from "next/link";
 
 interface Post {
   _id: string;
@@ -52,7 +53,9 @@ export default function PostContent({ postId }: { postId: string }) {
     }
   }, [postId, session?.user?.accessToken]);
 
-  if (isLoading) return null;
+  if (isLoading) {
+    return null;
+  }
   if (!post || !author) return <div>Post non trouvé</div>;
 
   return (
@@ -62,7 +65,9 @@ export default function PostContent({ postId }: { postId: string }) {
         
         <div className="flex items-center space-x-4">
           <Avatar>
-            <AvatarImage src={author.image} />
+            <Link href={`/page/autor/${author._id}`}>
+              <AvatarImage src={author.image} />
+            </Link>
             <AvatarFallback>{author.name[0]}</AvatarFallback>
           </Avatar>
           <div>

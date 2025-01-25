@@ -5,7 +5,7 @@ import { redirect, useSearchParams } from 'next/navigation';
 import ApiPost from '@/app/api/posts/post';
 import PostCard from '@/components/post/PostCard';
 import { useSession } from 'next-auth/react';
-import { Post } from '@/types/post';
+import { Post } from '@/app/api/interfaces/post';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const SearchSkeleton = () => (
@@ -51,7 +51,7 @@ export default function SearchPage() {
     });
 
     if (!session?.user?.accessToken) {
-        redirect('/page/login?callbackUrl=/page/search');
+        redirect('/page/login?callbackUrl=/search?q=' + initialParams.current.query);
     }
 
     useEffect(() => {
@@ -93,7 +93,7 @@ export default function SearchPage() {
             ) : posts.length > 0 ? (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {posts.map((post) => (
-                        <PostCard key={post.id} post={post} />
+                        <PostCard key={post._id} post={post} />
                     ))}
                 </div>
             ) : (

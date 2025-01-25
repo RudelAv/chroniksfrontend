@@ -44,14 +44,16 @@ export const authOptions: NextAuthOptions = {
             credentials: {
                 email: { label: "Email", type: "email" },
                 password: { label: "Password", type: "password" },
-                confirmPassword: { label: "PasswordConfirm", type: "password" }
+                confirmPassword: { label: "PasswordConfirm", type: "password" },
+                name: { label: "Name", type: "text" }
             },
             async authorize(credentials) {
-                const { email, password, confirmPassword } = credentials as any
-                const res = await ApiAuthSignUp.signupWithEmail({ 
-                    email, 
-                    password, 
-                    confirmPassword 
+                const { email, password, confirmPassword, name } = credentials as any
+                const res = await ApiAuthSignUp.signupWithEmail({
+                    email,
+                    password,
+                    confirmPassword,
+                    name
                 })
                 const response = await res.json()
                 
@@ -212,7 +214,7 @@ export const authOptions: NextAuthOptions = {
                 const currentTime = Math.floor(Date.now() / 1000)
                 const tokenExpiry = token.profile?.exp || 0
                 const timeUntilExpiry = tokenExpiry - currentTime
-                if (timeUntilExpiry < 4) {
+                if (timeUntilExpiry < 600) {
                     try {
                         const resp = await ApiLogin.refresh(token.refreshToken as string)
                         const res = await resp.json()

@@ -9,6 +9,8 @@ import { useStore } from '@/stores/useStore'
 
 interface ProfileFormProps {
   session: Session;
+  userId?: string;
+  readOnly?: boolean;
 }
 
 interface ProfileFormData {
@@ -19,7 +21,7 @@ interface ProfileFormData {
   confirmPassword: string;
 }
 
-export const ProfileForm: React.FC<ProfileFormProps> = ({ session }) => {
+export const ProfileForm: React.FC<ProfileFormProps> = ({ session, userId, readOnly }) => {
   const { toast } = useToast();
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [formData, setFormData] = useState<ProfileFormData>({
