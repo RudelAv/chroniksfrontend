@@ -12,6 +12,7 @@ export default function PostList() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -27,6 +28,7 @@ export default function PostList() {
           const bestPosts = await ApiPost.getBestPosts();
           setPosts(bestPosts);
         }
+
       } catch (err) {
         setError("Impossible de charger les articles");
         console.error("Erreur lors du chargement des posts:", err);

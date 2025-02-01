@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"; // Import ajouté
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useRouter } from "next/navigation";
@@ -13,6 +14,10 @@ interface PostCardProps {
     imagePreview?: string;
     tags: string[];
     createdAt: string;
+    author: { 
+      name: string;
+      image?: string;
+    };
   };
 }
 
@@ -36,6 +41,15 @@ export default function PostCard({ post }: PostCardProps) {
           </div>
         )}
         <CardHeader>
+          <div className="flex items-center gap-3 mb-2"> {/* Nouvelle section avatar */}
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={post.author.image} />
+              <AvatarFallback>
+                {post.author.name[0]?.toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <span className="text-sm font-medium">{post.author.name}</span>
+          </div>
           <h2 className="text-xl font-semibold line-clamp-2">{post.title}</h2>
           <div className="flex flex-wrap gap-2">
             {post.tags.slice(0, 3).map((tag) => (
@@ -72,4 +86,4 @@ export default function PostCard({ post }: PostCardProps) {
       </Card>
     </Link>
   );
-} 
+}

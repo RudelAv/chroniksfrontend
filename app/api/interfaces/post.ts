@@ -5,4 +5,9 @@ export interface Post {
     imagePreview?: string;
     tags: string[];
     createdAt: string;
+    author: {
+        name: string;
+        image?: string;
+    };
+
 } 

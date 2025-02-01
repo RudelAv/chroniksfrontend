@@ -35,7 +35,7 @@ export default async function HomePage() {
         {session && (
           <Link
             href="/page/write"
-            className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90"
+            className="text-white border border-primary px-4 py-2 rounded-md hover:bg-primary/20"
           >
             Écrire un article
           </Link>

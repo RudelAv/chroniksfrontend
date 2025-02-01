@@ -64,14 +64,17 @@ export default function PostContent({ postId }: { postId: string }) {
         <h1 className="text-3xl font-bold">{post.title}</h1>
         
         <div className="flex items-center space-x-4">
-          <Avatar>
-            <Link href={`/page/autor/${author._id}`}>
+          <Link href={`/page/autor/${author._id}`}>
+            <Avatar>
               <AvatarImage src={author.image} />
-            </Link>
-            <AvatarFallback>{author.name[0]}</AvatarFallback>
-          </Avatar>
+              <AvatarFallback>{author.name[0]}</AvatarFallback>
+            </Avatar>
+          </Link>
+
           <div>
-            <p className="font-medium">{author.name}</p>
+            <Link href={`/page/autor/${author._id}`}>
+              <p className="font-medium">{author.name}</p>
+            </Link>
             <p className="text-sm text-muted-foreground">
               {formatDistanceToNow(new Date(post.createdAt), { 
                 addSuffix: true,

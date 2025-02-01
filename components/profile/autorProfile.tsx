@@ -108,7 +108,7 @@ export const AutorProfile: React.FC<ProfileFormProps> = ({ session, userId }) =>
         <Suspense fallback={<PostListSkeleton />}>
           {posts.map((post) => (
             <PostCard key={post._id} post={post} />
-          ))}
+          ))} 
         </Suspense>
       </section>
     </div>
