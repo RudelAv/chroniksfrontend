@@ -8,7 +8,13 @@ import CommentSection from "@/components/post/CommentSection";
 import PostActions from "@/components/post/PostActions";
 import { PostSkeleton } from "@/components/post/PostSkeleton";
 
-export default async function PostPage({ params }: { params: { id: string } }) {
+interface PostPageProps {
+    params: {
+        id: string;
+    }
+}
+
+export default async function PostPage({ params }: PostPageProps) {
     const session = await getServerSession(authOptions);
 
     if (!session) {
