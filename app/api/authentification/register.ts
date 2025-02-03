@@ -1,7 +1,7 @@
 import BackendApi from "../baseApi";
 
 export default class ApiAuthSignUp {
-    static baseUrl = process.env.NEXT_PUBLIC_API_URL + "/signup";
+    static baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL + "/signup";
 
     static async signupWithEmail(data: {
         name: string,

@@ -9,10 +9,6 @@ import {
     Tag
   } from "lucide-react";
 
-
-
-
-
 interface SidebarProps {
   className?: string;
 }
@@ -39,7 +35,7 @@ export function Sidebar({ className }: SidebarProps) {
     {
       title: "Communautés",
       items: [
-        { name: "Rejoindre une communauté", href: "/network/squads", icon: <Users /> },
+        { name: "Rejoindre une communauté", href: "/page/network/community", icon: <Users /> },
         { name: "Créer une communauté", href: "/page/network/new", icon: <PlusCircle /> },
       ],
     },

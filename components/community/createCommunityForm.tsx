@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Label } from "@/components/ui/label";
 import { useState } from 'react';
+import ApiCommunity from '@/app/api/community/community'
+import { toast } from 'sonner'
 
 export default function CreateCommunityForm() {
   const router = useRouter()
@@ -31,10 +33,36 @@ export default function CreateCommunityForm() {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("description", description);
+        if (imageFile) {
+          formData.append("image", imageFile);
+        }
+
+        const response = await ApiCommunity.createCommunity(session?.user?.accessToken, formData);
+
+        if (response._id) {
+          toast.success("Communauté créée avec succès");
+          router.push(`/page/community/${response._id}`);
+        }
+    } catch (error: any) {
+        console.error(error);
+        toast.error(error.message);
+    } finally {
+        setIsLoading(false);
+    }
+  }
+
   return (
     <div className="max-w-2xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Créer une communauté</h1>
-      <form className="space-y-6">
+      <form className="space-y-6" onSubmit={handleSubmit}>
         <div>
           <Label htmlFor="name">Nom</Label>
           <Input

@@ -1,7 +1,7 @@
 import BackendApi from "../baseApi";
 
 export default class ApiProfile {
-    static url = process.env.NEXT_PUBLIC_API_URL || "";
+    static url = process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
     static async updatePassword(accessToken: any, updateData: { currentPassword: string; newPassword: string; }) {
         const api = new BackendApi(`${this.url}/profile`);

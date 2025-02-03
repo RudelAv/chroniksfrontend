@@ -1,7 +1,7 @@
 import BackendApi from "../baseApi";
 
 export default class ApiLogin {
-    static url = process.env.NEXT_PUBLIC_API_URL || "";
+    static url = process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
     static async loginEmail(email: string, password: string) {
         console.log("login", email, password);

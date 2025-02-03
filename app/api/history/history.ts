@@ -1,7 +1,7 @@
 import BackendApi from "../baseApi";
 
 export default class HistoryApi {
-    static url = process.env.NEXT_PUBLIC_API_URL;
+    static url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
     static async getHistory(accessToken: string) {
         const api = new BackendApi(`${this.url}`);

@@ -32,16 +32,13 @@ export default function RootLayout({
           >
             <div className="flex flex-col min-h-screen">
               <Navbar />
-              
               <div className="flex flex-1">
                 <Sidebar className="sticky top-0 h-screen w-64 border-r lg:block hidden" />
-                
                 <main className="flex-1 p-8 bg-background">
                   {children}
                 </main>
               </div>
             </div>
-            
             <Toaster />
             <SonnerToaster position="top-right" />
           </ThemeProvider>
