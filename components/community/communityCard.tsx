@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { Users } from "lucide-react";
 import ApiCommunity from "@/app/api/community/community";
 import { toast } from "sonner";
+import { useState } from "react";
 
 interface CommunityCardProps {
     community: {
@@ -25,25 +26,28 @@ interface CommunityCardProps {
         createdAt: string;
         updatedAt: string;
     }
+    accessToken: any;
 }
 
-export function CommunityCard({ community, accessToken }: { community: CommunityCardProps["community"], accessToken: any }) {
+export function CommunityCard({ community, accessToken }: CommunityCardProps) {
+    const [memberCount, setMemberCount] = useState(community.members.length);
 
     const handleJoin = async () => {
         try {
-            const response = await ApiCommunity.joinCommunity(accessToken, community._id);  
+            const response = await ApiCommunity.joinCommunity(accessToken, community._id);
             console.log(response);
             if(response) {
+                setMemberCount(memberCount + 1);
                 toast.success(`Vous avez rejoint la communauté ${community.name}`, {
                     description: `Vous pouvez maintenant participer aux discussions et aux événements de la communauté ${community.name}`
                 });
-            }  
+            }
         } catch (error: any) {
             console.log(error);
             toast.error("Une erreur est survenue ", error.message);
         }
-        
     }
+
     return (
         <Card className="overflow-hidden">
             <div className="relative">
@@ -79,7 +83,7 @@ export function CommunityCard({ community, accessToken }: { community: Community
                 <div className="absolute -bottom-6 right-4">
                     <Badge variant="secondary" className="flex items-center gap-1">
                         <Users className="w-4 h-4" />
-                        {community.members.length} membre{community.members.length > 1 ? 's' : ''}
+                        {memberCount} membre{memberCount > 1 ? 's' : ''}
                     </Badge>
                 </div>
             </div>
