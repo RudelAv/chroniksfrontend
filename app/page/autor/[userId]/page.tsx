@@ -2,10 +2,9 @@ import { getServerSession } from 'next-auth/next';
 import { redirect } from 'next/navigation';
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth-options';
 import { AutorProfile } from '@/components/profile/autorProfile';
+import { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
-
-import { Metadata } from 'next';
 
 export async function generateMetadata({ params }: { params: { userId: string } }): Promise<Metadata> {
   return {
