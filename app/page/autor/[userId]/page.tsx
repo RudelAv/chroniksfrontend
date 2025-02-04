@@ -5,13 +5,20 @@ import { AutorProfile } from '@/components/profile/autorProfile';
 
 export const dynamic = 'force-dynamic';
 
-// Types corrects pour Next.js
-type Props = {
+import { Metadata } from 'next';
+
+export async function generateMetadata({ params }: { params: { userId: string } }): Promise<Metadata> {
+  return {
+    title: 'Author Page - ' + params.userId,
+  };
+}
+
+interface Props {
   params: {
     userId: string;
   };
-  searchParams?: { [key: string]: string | string[] | undefined };
-};
+  searchParams: { [key: string]: string | string[] | undefined };
+}
 
 const AutorPage = async ({ params, searchParams }: Props) => {
   const session = await getServerSession(authOptions);
