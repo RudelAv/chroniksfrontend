@@ -17,7 +17,6 @@ export default function RegisterPage() {
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLoading(true);
-  
     try {
       const formData = new FormData(event.currentTarget);
       const response = await ApiAuthSignUp.signupWithEmail({
