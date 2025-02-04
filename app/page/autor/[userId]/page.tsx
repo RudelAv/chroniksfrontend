@@ -3,13 +3,17 @@ import { redirect } from 'next/navigation';
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth-options';
 import { AutorProfile } from '@/components/profile/autorProfile';
 
-interface AutorPageProps {
+export const dynamic = 'force-dynamic';
+
+// Types corrects pour Next.js
+type Props = {
   params: {
     userId: string;
   };
-}
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
 
-const AutorPage = async ({ params }: AutorPageProps) => {
+const AutorPage = async ({ params, searchParams }: Props) => {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -21,6 +25,6 @@ const AutorPage = async ({ params }: AutorPageProps) => {
       <AutorProfile session={session} userId={params.userId} />
     </div>
   );
-};
+}
 
 export default AutorPage;
