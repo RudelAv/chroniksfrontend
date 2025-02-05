@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, Suspense } from 'react';
 import { redirect, useSearchParams } from 'next/navigation';
 import ApiPost from '@/app/api/posts/post';
 import PostCard from '@/components/post/PostCard';
@@ -38,7 +38,7 @@ const SearchSkeleton = () => (
     </div>
 );
 
-export default function SearchPage() {
+function SearchContent() {
     const { data: session } = useSession();
     const searchParams = useSearchParams();
     const [posts, setPosts] = useState<Post[]>([]);
@@ -103,4 +103,12 @@ export default function SearchPage() {
             )}
         </div>
     );
-} 
+}
+
+export default function SearchPage() {
+    return (
+        <Suspense fallback={<SearchSkeleton />}>
+            <SearchContent />
+        </Suspense>
+    );
+}

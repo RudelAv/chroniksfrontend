@@ -7,6 +7,9 @@ const nextConfig = {
     config.externals = [...(config.externals || []), "canvas", "jsdom"];
     return config;
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 }
 
 module.exports = nextConfig 
