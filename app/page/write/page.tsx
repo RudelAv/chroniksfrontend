@@ -2,6 +2,12 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/auth-options";
 import CreatePostForm from "@/components/post/CreatePostForm";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Créer un nouveau post - Chroniks',
+  description: 'Partagez vos connaissances et vos idees avec le monde, sur Chroniks',
+};
 
 export default async function WritePage() {
     const session = await getServerSession(authOptions);

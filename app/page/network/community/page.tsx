@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import {CommunityList} from "@/components/community/CommunityList";
 import { Suspense } from "react";
+import { PostListSkeleton } from "@/components/post/PostSkeleton";
 
 export default async function CommunityPage() {
     const session = await getServerSession(authOptions);
@@ -13,7 +14,7 @@ export default async function CommunityPage() {
     return (
     <div className="container mx-auto py-8">
         <h1 className="text-3xl font-bold mb-8">Communautés</h1>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<PostListSkeleton />}>
             <CommunityList />
         </Suspense>
     </div>
