@@ -58,6 +58,21 @@ export default class ApiPost {
         return await api.delete(`/${postId}/dislike`, accessToken);
     }
 
+    static async savePost(accessToken: any, postId: string) {
+        const api = new BackendApi(`${this.url}/post`);
+        return await api.post(`/${postId}/save`, {}, accessToken);
+    }
+
+    static async unSavePost(accessToken: any, postId: string) {
+        const api = new BackendApi(`${this.url}/post`);
+        return await api.delete(`/${postId}/unsaved`, accessToken);
+    }
+
+    static async getSavedPosts(accessToken: any) {
+        const api = new BackendApi(`${this.url}/post`);
+        return await api.get('/saved', accessToken);
+    }
+
     static async searchPost(accessToken: any, query: string, tags?: string[]) {
         const api = new BackendApi(`${this.url}/post`);
         const searchParams = new URLSearchParams({ q: query });

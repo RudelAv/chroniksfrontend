@@ -89,8 +89,8 @@ export const authOptions: NextAuthOptions = {
     ],
     session: {
         strategy: "jwt",
-        maxAge: 60 * 60, // 1 hour
-        updateAge: 60 * 30, // 30 min
+        maxAge: 2 * 60 * 60, // 2 hours
+        updateAge: 1 * 60 * 60, // 1 hour
     },
     secret: process.env.ACCESS_TOKEN_SECRET,
     jwt: {
@@ -214,7 +214,7 @@ export const authOptions: NextAuthOptions = {
                 const currentTime = Math.floor(Date.now() / 1000)
                 const tokenExpiry = token.profile?.exp || 0
                 const timeUntilExpiry = tokenExpiry - currentTime
-                if (timeUntilExpiry < 600) {
+                if (timeUntilExpiry < 200) {
                     try {
                         const resp = await ApiLogin.refresh(token.refreshToken as string)
                         const res = await resp.json()

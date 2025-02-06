@@ -42,7 +42,7 @@ export function Sidebar({ className }: SidebarProps) {
     {
       title: "Posts",
       items: [
-        { name: "Enregistrés", href: "/bookmarks/quick", icon: <Bookmark /> },
+        { name: "Enregistrés", href: "/page/post/saved-post", icon: <Bookmark /> },
         { name: "Écrire un article", href: "/page/write", icon: <Book /> },
       ],
     },

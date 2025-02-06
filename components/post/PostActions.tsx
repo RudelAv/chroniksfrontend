@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Heart, Share2, MessageCircle } from 'lucide-react';
+import { Heart, Share2, MessageCircle, Bookmark } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ApiPost from '@/app/api/posts/post';
 import { useSession } from 'next-auth/react';
@@ -65,6 +65,18 @@ export default function PostActions({ postId }: { postId: string }) {
         }
     };
 
+    const handleSave = async () => {
+        if (!session) return;
+
+        try {
+            const response = await ApiPost.savePost(session.user.accessToken, postId);
+            toast.success('post enregistré');
+            setPost(response);
+        } catch (error:any) {
+            toast.error(error.message);
+        }
+    };
+
     return (
         <div className="flex items-center gap-4 py-4">
             <Button 
@@ -84,6 +96,15 @@ export default function PostActions({ postId }: { postId: string }) {
             >
                 <MessageCircle className="mr-2" />
                 {post?.comments.length || 0} Commentaires
+            </Button>
+
+            <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={handleSave}
+            >
+                <Bookmark className="mr-2" />
+                Sauvegarder
             </Button>
 
             <Button 

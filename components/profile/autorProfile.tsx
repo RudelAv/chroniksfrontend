@@ -61,7 +61,7 @@ export const AutorProfile: React.FC<ProfileFormProps> = ({ session, userId }) =>
 
 
   return (
-    <div className="space-y-8 max-w-2xl mx-auto">
+    <div className="">
       {/* Section Photo de profil */}
       <section className="p-6 rounded-lg shadow">
         <h2 className="text-xl font-semibold mb-4">Photo de profil</h2>
@@ -105,11 +105,13 @@ export const AutorProfile: React.FC<ProfileFormProps> = ({ session, userId }) =>
       {/* Section Posts */}
       <section className="p-6 rounded-lg shadow">
         <h2 className="text-xl font-semibold mb-4">Posts</h2>
-        <Suspense fallback={<PostListSkeleton />}>
-          {posts.map((post) => (
-            <PostCard key={post._id} post={post} />
-          ))} 
-        </Suspense>
+        <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
+          <Suspense fallback={<PostListSkeleton />}>
+            {posts.map((post) => (
+              <PostCard key={post._id} post={post} />
+            ))} 
+          </Suspense>
+        </div>
       </section>
     </div>
   );
