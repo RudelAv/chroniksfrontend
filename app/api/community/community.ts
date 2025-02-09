@@ -37,4 +37,19 @@ export default class ApiCommunity {
         const api = new BackendApi(`${this.url}/community`);
         return await api.delete(`/${communityId}/leave`, accessToken);
     }   
+
+    static async createEvent(accessToken: any, communityId: string, formData: FormData) {
+        const api = new BackendApi(`${this.url}/community`);
+        return await api.postFormData(`/${communityId}/event`, formData, accessToken);
+    }
+
+    static async registerForEvent(accessToken: any, communityId: string, eventId: string) {
+        const api = new BackendApi(`${this.url}/community`);
+        return await api.post(`/${communityId}/event/${eventId}/register`, {}, accessToken);
+    }
+
+    static async unregisterFromEvent(accessToken: any, communityId: string, eventId: string) {
+        const api = new BackendApi(`${this.url}/community`);
+        return await api.delete(`/${communityId}/event/${eventId}/register`, accessToken);
+    }
 }
