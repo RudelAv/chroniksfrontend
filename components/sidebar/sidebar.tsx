@@ -22,7 +22,6 @@ export function Sidebar({ className }: SidebarProps) {
         { name: "Explorer", href: "/feed/explore", icon: <Search /> },
         { name: "Mon historique", href: "/feed/history", icon: <Clock /> },
       ],
-
     },
     {
       title: "Mes flux",
@@ -35,7 +34,7 @@ export function Sidebar({ className }: SidebarProps) {
     {
       title: "Communautés",
       items: [
-        { name: "Rejoindre une communauté", href: "/page/network/community", icon: <Users /> },
+        { name: "Rejoindre une communauté", href: "/page/network", icon: <Users /> },
         { name: "Créer une communauté", href: "/page/network/new", icon: <PlusCircle /> },
       ],
     },

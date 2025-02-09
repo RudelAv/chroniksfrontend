@@ -69,9 +69,9 @@ export default function PostActions({ postId }: { postId: string }) {
         if (!session) return;
 
         try {
-            const response = await ApiPost.savePost(session.user.accessToken, postId);
+            await ApiPost.savePost(session.user.accessToken, postId);
             toast.success('post enregistré');
-            setPost(response);
+            // setPost(response);
         } catch (error:any) {
             toast.error(error.message);
         }
