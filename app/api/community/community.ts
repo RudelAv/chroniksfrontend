@@ -57,4 +57,9 @@ export default class ApiCommunity {
         const api = new BackendApi(`${this.url}/community`);
         return await api.get(`/${communityId}/posts`, accessToken);
     }
+
+    static async createPost(accessToken: any, communityId: string, formData: FormData) {
+        const api = new BackendApi(`${this.url}/community`);
+        return await api.postFormData(`/${communityId}/post`, formData, accessToken);
+    }
 }

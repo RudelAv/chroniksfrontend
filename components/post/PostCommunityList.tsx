@@ -26,6 +26,7 @@ export default function PostCommunityList({ communityId, accessToken }: PostComm
                 if (accessToken) {
                     const response = await ApiCommunity.getCommunityPosts(accessToken, communityId);
                     setCommunityPosts(response.posts);
+                    console.log(response.posts);
                 }
             } catch (error) {
                 logError(error);
