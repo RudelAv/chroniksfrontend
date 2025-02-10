@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { Calendar, Clock, MapPin, Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ApiCommunity from '@/app/api/community/community';
+import { toast } from 'sonner';
 
 interface Location {
   type: 'online' | 'physical';
@@ -79,6 +80,7 @@ const EventsCalendar = ({ communityId }: EventsCalendarProps) => {
               registrations: [...event.registrations, session.user?.id as string]
             };
           }
+          toast.success('Inscription reussie');
           return event;
         })
       );

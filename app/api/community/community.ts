@@ -52,4 +52,9 @@ export default class ApiCommunity {
         const api = new BackendApi(`${this.url}/community`);
         return await api.delete(`/${communityId}/event/${eventId}/register`, accessToken);
     }
+
+    static async getCommunityPosts(accessToken: any, communityId: string) {
+        const api = new BackendApi(`${this.url}/community`);
+        return await api.get(`/${communityId}/posts`, accessToken);
+    }
 }
