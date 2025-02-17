@@ -62,4 +62,16 @@ export default class ApiCommunity {
         const api = new BackendApi(`${this.url}/community`);
         return await api.postFormData(`/${communityId}/post`, formData, accessToken);
     }
+
+    static async hasAdminAccess(accessToken: any, communityId: string) {
+        const api = new BackendApi(`${this.url}/community`);
+        return await api.get(`/${communityId}/admin`, accessToken);
+    }
+
+    static async getCommunityMembers(accessToken: any, communityId: string, page = 1, limit = 10) {
+        const skip = (page - 1) * limit; // Calcul du skip en fonction de la page
+        const api = new BackendApi(`${this.url}/community`);
+        const response = await api.get(`/${communityId}/members?skip=${skip}&limit=${limit}`, accessToken);
+        return response.members;
+    }
 }

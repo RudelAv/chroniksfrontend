@@ -33,8 +33,6 @@ export const authOptions: NextAuthOptions = {
             async authorize(credentials) {
                 const { email, password } = credentials as any
                 const res = await ApiLogin.loginEmail(email, password)
-                // const user = await res.json()
-                // console.log("user", user)
                 return res
             },
         }),

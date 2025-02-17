@@ -6,6 +6,7 @@ import CommunityPostModal from '@/components/community/communityPostModal';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth-options';
 import { redirect } from 'next/navigation';
+import CreateEventModal from '@/components/community/CommunityEventModal';
 
 export default async function Community({ params }: { params: { communityId: string } }) {
     const session = await getServerSession(authOptions);
@@ -20,7 +21,10 @@ export default async function Community({ params }: { params: { communityId: str
             <CommunityHeader communityId={params.communityId} />
             
             <div className="mt-8">
-                <h2 className="text-2xl font-semibold mb-6">Événements</h2>
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-2xl font-semibold">Événements</h2>
+                    <CreateEventModal communityId={params.communityId} accessToken={session?.user.accessToken} />
+                </div>
                 <EventsCalendar communityId={params.communityId} />
             </div>
 

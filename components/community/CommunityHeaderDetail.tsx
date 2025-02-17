@@ -2,11 +2,13 @@
 
 import React, { useEffect, useState } from 'react';
 import { Badge } from "@/components/ui/badge";
-import { User } from 'lucide-react';
+import { User, Users } from 'lucide-react';
 import { useSession } from "next-auth/react";
 import ApiCommunity from "@/app/api/community/community";
 import { Avatar, AvatarFallback } from '@radix-ui/react-avatar';
 import { toast } from 'sonner';
+import { Button } from '../ui/button';
+import MembersCommunityModal from './membersCommunityModal';
 
 export interface CommunityHeaderProps {
     communityId: string;
@@ -18,6 +20,7 @@ const CommunityHeader = ({ communityId }: CommunityHeaderProps) => {
     const [isMember, setIsMember] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         if (status === "authenticated" && session?.user?.accessToken) {
@@ -81,6 +84,14 @@ const CommunityHeader = ({ communityId }: CommunityHeaderProps) => {
             }
         } catch (error: any) {
             toast.error("Une erreur est survenue ", error.message);
+        }
+    };
+
+    const handleOpenMembersModal = () => {
+        if (session?.user?.accessToken) {
+            setIsModalOpen(true);
+        } else {
+            toast.error("Vous devez être connecté pour voir les membres");
         }
     };
 
@@ -168,14 +179,20 @@ const CommunityHeader = ({ communityId }: CommunityHeaderProps) => {
                             Rejoindre la communauté
                         </button>
                     )}
-                    <div className="flex items-center">
-                        <div className="flex -space-x-2">
+                    
+                    {/* Affichage du nombre de membres et bouton d'ouverture de la modal */}
+                    <button 
+                        className="flex items-center bg-transparent hover:bg-purple-800 px-4 py-2 rounded-full transition-colors"
+                        onClick={handleOpenMembersModal}
+                    >
+                        <div className="flex -space-x-2 mr-2">
                             <div className="w-8 h-8 rounded-full bg-gray-300 border-2 border-purple-900 flex items-center justify-center">
                                 <User className="w-4 h-4 text-gray-600" />
                             </div>
                         </div>
-                        <span className="ml-4 text-sm text-gray-300">{communityData.membersCount} membres</span>
-                    </div>
+                        <span className="text-sm text-gray-300">{communityData.membersCount} membres</span>
+                        <Users className="ml-2 w-4 h-4 text-gray-300" />
+                    </button>
                 </div>
 
                 {/* Moderators */}
@@ -193,6 +210,16 @@ const CommunityHeader = ({ communityId }: CommunityHeaderProps) => {
                         ))}
                     </div>
                 </div>
+                
+                {/* Modal des membres */}
+                {session?.user?.accessToken && (
+                    <MembersCommunityModal 
+                        communityId={communityId}
+                        accessToken={session.user.accessToken}
+                        isOpen={isModalOpen}
+                        onOpenChange={setIsModalOpen}
+                    />
+                )}
             </div>
         </div>
     );

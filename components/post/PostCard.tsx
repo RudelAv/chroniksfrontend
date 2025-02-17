@@ -67,7 +67,11 @@ export default function PostCard({ post }: PostCardProps) {
             {post.tags?.map((tag) => (
               <button
                 key={tag}
-                onClick={() => handleTagClick(tag)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  event.preventDefault();
+                  handleTagClick(tag);
+                }}
                 className="text-sm bg-primary/10 text-primary px-2 py-1 rounded-full hover:bg-primary/20 transition-colors"
               >
                 #{tag}
