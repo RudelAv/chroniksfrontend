@@ -8,6 +8,7 @@ import ApiLogin from "@/app/api/authentification/login";
 import SearchBar from "./navbar/SearchBar";
 import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ThemeToggle } from "./theme-toggle"
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -30,6 +31,7 @@ export default function Navbar() {
 
   const NavItems = () => (
     <>
+      <ThemeToggle />
       {session ? (
         <>
           <Link href="/page/write">
