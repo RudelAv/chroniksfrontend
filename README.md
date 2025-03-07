@@ -29,7 +29,7 @@ DevBlog est une plateforme de blogging dédiée aux développeurs et passionnés
 2. Installez les dépendances : `npm install`
 3. Configurez les variables d'environnement : 
 ```
-NEXT_PUBLIC_API_URL=http://localhost:4000/api/v1
+NEXT_PUBLIC_API_URL=http:URL_DE_L'API
 ACCESS_TOKEN_SECRET=LA_CLE_SECRETE_POUR_LE_TOKEN_D_ACCES
 ```
 NB: La clé secrète pour le token d'accès doit être la même que celle utilisée dans le serveur backend.
